@@ -1,8 +1,14 @@
+/*
+	./webpack.config.js
+	author: jwelfare
+	desc.: exported config object for webpack middleware. Defines entry point for client-side js
+*/
+
 module.exports = { 
-	entry: __dirname + '/src',
+	entry: __dirname + '/src/client.js',
 	output: {
 		path: '/',
-		filename: 'bundle.js'
+		filename: 'client.js'
 	},
 	devtool: 'source-maps',
 	module: {

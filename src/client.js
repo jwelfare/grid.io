@@ -1,7 +1,17 @@
+/*
+	./src/client.js
+	author: jwelfare
+	desc.: client-side script, show single user view, emits events on interaction, and listens for server emitted events
+*/
+
+import io from 'socket.io-client'
 const TILE_SIZE = 30;
 const BOARD_SIZE = 20;
 
 document.addEventListener('DOMContentLoaded', function() {
+	var socket = io('/')
+	socket.on('connection-made', () => { alert("socket connection complete") })
+
 	var canvas = document.getElementById('gameCanvas'),
 		context = canvas.getContext('2d'),
 		width = window.innerWidth,
@@ -11,7 +21,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	canvas.height = TILE_SIZE * BOARD_SIZE;
 
 	var board = new Board(context, BOARD_SIZE, BOARD_SIZE)
-	var player = new Player("John")
+	var player = new Player("Jace")
 
     board.render()
 

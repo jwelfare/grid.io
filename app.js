@@ -10,16 +10,16 @@ var express = require('express'),
 	bodyParser = require('body-parser'),
 	webpack = require('webpack'),
 	webpackDevMiddleware = require('webpack-dev-middleware'),
-	webpackConfig = require('./webpack.config.js')
+	webpackClientConfig = require('./webpack.client.config.js')
 
 var app = express()
 var server = http.createServer(app)
 var io = socketIo(server)
 
-require('./websocket/server.js')(io)
-
 app.use(express.static(__dirname + '/public'));
-app.use(webpackDevMiddleware(webpack(webpackConfig)))
+app.use(webpackDevMiddleware(webpack(webpackClientConfig)))
 app.use(bodyParser.urlencoded({ extended: false }))
+
+require('./server/server.js')(io)
 
 server.listen(3000)

@@ -28,8 +28,9 @@ module.exports = function(io) {
 		})
 
 		socket.on('cell-clicked', (data) => {
-			console.log(game.cellClicked(data, socket.id))
+			game.cellClicked(data, socket.id)
+			
+			socket.emit('board-load', game.getBoard())
 		})
 	})
-
 }

@@ -6,7 +6,6 @@ export default class Board {
 
 		this.cellsArray = socketCellsArray.map((row) => {
 			return row.map((c) => {
-				console.log(c)
 				return new Cell(this.canvasContext, c.cellColor, c.col, c.row)
 			})
 		})

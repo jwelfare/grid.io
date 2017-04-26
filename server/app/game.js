@@ -12,8 +12,6 @@ import Player from './Player'
 export default class Game { 
 	constructor() {
 		this.board = new Board(Constants.BOARD_SIZE)
-		this.board.initBoard()
-
 		this.players = {}
 	}
 

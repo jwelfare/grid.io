@@ -5,15 +5,21 @@ export default class Board {
 		this.canvasContext = canvasContext
 
 		this.cellsArray = socketCellsArray.map((row) => {
-			return row.map((c) => {
-				return new Cell(this.canvasContext, c.cellColor, c.col, c.row)
+			return row.map((cell) => {
+				return new Cell(this.canvasContext, cell.cellColor, cell.col, cell.row)
 			})
+		})
+	}
+
+	updateCells(cells) {
+		cells.map((cell) => {
+			Object.assign(this.cellsArray[cell.col][cell.row], cell) 
 		})
 	}
 
 	render() {
 		this.cellsArray.map((row) => {
-			row.map((c) => { c.render() })
+			row.map((cell) => { cell.render() })
 		})
 	}
 }

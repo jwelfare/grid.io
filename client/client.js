@@ -3,6 +3,8 @@
 // 	author: jwelfare
 // 	desc.: client-side script, show single user view, emits events on interaction, and listens for server emitted events
 // */
+
+//todo: refactor JS file (separate emitters/listeners from UI)
 import io from 'socket.io-client'
 import * as Constants from '../constants/constants'
 import Board from './app/board'
@@ -15,8 +17,8 @@ let gameCanvas = document.getElementById('gameCanvas'),
 	socket = io('/'),
 	board
 
-gameCanvas.width = Constants.CELL_SIZE * Constants.BOARD_SIZE + Constants.BOARD_SIZE * Constants.CELL_BUFFER;
-gameCanvas.height = Constants.CELL_SIZE * Constants.BOARD_SIZE + Constants.BOARD_SIZE * Constants.CELL_BUFFER;
+gameCanvas.width = Constants.CELL_SIZE * Constants.BOARD_SIZE
+gameCanvas.height = Constants.CELL_SIZE * Constants.BOARD_SIZE
 
 signonSubmit.onclick = function() {
 	socket.emit('player-new', {
@@ -32,14 +34,15 @@ socket.on('board-load', (data) => {
 	board.render()
 })
 
-gameCanvas.onclick = function(e) {
-	console.log(e)
-	console.log(Constants.CELL_SIZE)
+socket.on('cell-changes', (cellChanges) => {
+	board.updateCells(cellChanges)
+	board.render()
+})
 
+gameCanvas.onclick = function(e) {
     let rect = gameCanvas.getBoundingClientRect()
     let col = Math.floor((e.clientX - rect.left) / Constants.CELL_SIZE)
     let row = Math.floor((e.clientY - rect.top) / Constants.CELL_SIZE)
-
 
     console.log(col + ", " + row)
 

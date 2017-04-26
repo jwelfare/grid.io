@@ -6,29 +6,28 @@ export default class Board {
 		this.boardSize = boardSize
 		this.cellsArray = []
 
-		this.initBoard()
-	}
-
-	initBoard() {
-		for (var nCol = 0; nCol < this.boardSize; nCol++) {
+		for (let nCol = 0; nCol < this.boardSize; nCol++) {
 			this.cellsArray[nCol] = []
-			for (var nRow = 0; nRow < this.boardSize; nRow++) {
+			for (let nRow = 0; nRow < this.boardSize; nRow++) {
 				this.cellsArray[nCol].push(new Cell(nCol, nRow))
 			}
 		}
 	}
 
 	cellClicked(e, player) {
-		var cell = this.getCell(e.col, e.row)
+		let cell = this.getCell(e.col, e.row)
 
+		//todo: refactor out switch statement, have a new method that gets affected cells based on selected cells powerup
 		switch(cell.powerup) {
+			//case Constants.CELL_POWERUP_ENTIRECOL:
+				//return this.entireColCellClick(cell, player)
 			default:
-				return this.regularClick(cell, player)
+				return this.cellClick(cell, player)
 		}
 	}
 
-	regularClick(cell, player) {
-		var cells = [cell]
+	cellClick(cell, player) {
+		let cells = [cell]
 
 		if (cell.col != 0) 
 			cells.push(this.getCell(cell.col - 1, cell.row))
@@ -39,7 +38,7 @@ export default class Board {
 		if (cell.row != 0)
 			cells.push(this.getCell(cell.col, cell.row - 1))
 
-		if (cell.row != Constants.BOARD_SIZE - 1)
+		if (cell.row != Constants.BOARD_SIZE -1)
 			cells.push(this.getCell(cell.col, cell.row + 1))
 
 		return cells.map((c) => {

@@ -13,8 +13,8 @@ export default class Cell {
 		this.canvasContext.fillStyle = this.cellColor
 
 		this.canvasContext.fillRect(
-			this.col * Constants.CELL_SIZE + this.col * Constants.CELL_BUFFER, 
-			this.row * Constants.CELL_SIZE + this.row * Constants.CELL_BUFFER, 
+			this.col * Constants.CELL_SIZE/* + this.col * Constants.CELL_BUFFER*/, 
+			this.row * Constants.CELL_SIZE/* + this.row * Constants.CELL_BUFFER*/, 
 			Constants.CELL_SIZE, 
 			Constants.CELL_SIZE
 		)

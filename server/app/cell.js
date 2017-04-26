@@ -1,11 +1,27 @@
 export default class Cell {
-	constructor(x, y, owner = null) {
+	constructor(col, row, owner = null) {
 		this.owner = owner
-		this.x = x
-		this.y = y
+		this.col = col
+		this.row = row
+
+		this.powerup = null
 	}
 
-	assignOwner(owner) {
-		this.owner = owner
+	assignOwner(player) {
+		this.owner = player
+	}
+
+	getAsBroadcastable() {
+		var color = 'rgb('+
+		    (50 + Math.floor(Math.random()*206)) +','+
+		    (50 + Math.floor(Math.random()*206)) +','+
+		    (50 + Math.floor(Math.random()*206)) +')'
+
+		return {
+			col: this.col,
+			row: this.row,
+			// cellColor: this.owner ? this.owner.getPlayerColor() : "#000000"
+			cellColor: color
+		}
 	}
 }

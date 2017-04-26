@@ -1,18 +1,12 @@
 /*
 	./websocket/server.js
 	author: jwelfare
-	desc.: server-side socket code, maintains game states and listens/emits events on user interaction
+	desc.: server-side socket code, passes data from client to and from the game
 */
 
-import * as Constants from './app/constants'
-import Board from './app/board'
-import Cell from './app/cell'
-import Player from './app/Player'
+import Game from './app/game'
 
-var board = new Board(Constants.BOARD_SIZE)
-board.initBoard()
-
-var players = []
+var game = new Game();
 
 module.exports = function(io) {
 	/* socket.broadcast.emit - all clients EXCEPT socket client
@@ -21,10 +15,21 @@ module.exports = function(io) {
     */
 
 	io.on('connection', function(socket) {
-		socket.on('new-player', function(data) {
-			console.log('new player: ' + data.name + ' has joined the match')
-			players.push(new Player(data.name, socket.id))
-			io.emit('new-player', { name: data.name })
+		socket.on('player-new', (data) => {
+			console.log('new player connected: ' + data.playerName + ' (' + socket.id + ')')
+			game.newPlayer(data, socket.id)
+
+			socket.emit('board-load', game.getBoard())
+		})
+
+		socket.on('disconnect', () => {
+			console.log('player disconnected: ' + socket.id)
+			game.deletePlayer(socket.id)
+		})
+
+		socket.on('cell-clicked', (data) => {
+			console.log(game.cellClicked(data, socket.id))
 		})
 	})
+
 }

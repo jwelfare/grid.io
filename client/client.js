@@ -4,23 +4,37 @@
 // 	desc.: client-side script, show single user view, emits events on interaction, and listens for server emitted events
 // */
 import io from 'socket.io-client'
+import * as Constants from '../constants/constants'
+import Board from './app/board'
 
 var gameCanvas = document.getElementById('gameCanvas'),
+	gameCanvasContext = gameCanvas.getContext('2d'),
 	signon = document.getElementById('signon'),
 	signonName = document.getElementById('signon_name'),
 	signonSubmit = document.getElementById('signon_submit'),
-	socket = io('/')
+	socket = io('/'),
+	board
+
+
+gameCanvas.width = Constants.CELL_SIZE * Constants.BOARD_SIZE;
+gameCanvas.height = Constants.CELL_SIZE * Constants.BOARD_SIZE;
 
 signonSubmit.onclick = function() {
-	socket.emit('new-player', {
-		name: signonName.value
+	socket.emit('player-new', {
+		playerName: signonName.value
 	})
 
 	signon.style.display = "none"
 	gameCanvas.style.display = "block"
 }
 
-socket.on('new-player', (data) => alert("new player: " + data.name))
+socket.on('board-load', (data) => {
+	console.log('board-load event fired')
+	console.log(data)
+	board = new Board(gameCanvasContext, data)
+	console.log(board)
+	board.render()
+})
 
 // const TILE_SIZE = 30;
 // const BOARD_SIZE = 20;
@@ -62,31 +76,7 @@ socket.on('new-player', (data) => alert("new player: " + data.name))
 // 	}
 // }
 
-// class Board {
-// 	constructor(canvasContext, nTilesX, nTilesY) {
-// 		this.tilesArray = []
-// 		this.canvasContext = canvasContext
 
-// 		for (var nX = 0; nX < nTilesX; nX++) {
-// 			this.tilesArray.push([]);
-// 			for (var nY = 0; nY < nTilesY; nY++) {
-// 				this.tilesArray[nX].push(new Tile(canvasContext, nX, nY, TILE_SIZE))
-// 			}
-// 		}
-// 	}
-
-// 	getTile(x, y) {
-// 		return this.tilesArray[x][y];
-// 	}
-
-// 	render() {
-// 		for (var x = 0; x < BOARD_SIZE; x++) {
-// 			for (var y = 0; y < BOARD_SIZE; y++) { 
-// 				this.tilesArray[x][y].render()
-// 			}
-// 		}
-// 	}
-// }
 
 // class Tile {
 // 	constructor(canvasContext, x, y, size, owner = null) {
@@ -99,8 +89,6 @@ socket.on('new-player', (data) => alert("new player: " + data.name))
 // 	}
 
 // 	render() {
-// 		this.canvasContext.fillStyle = (this.owner) ? this.owner.getFillStyle() : "#000000"
-// 		this.canvasContext.fillRect(this.x * this.size, this.y * this.size, this.size, this.size)
 // 	}
 
 // 	giveControl(owner) {

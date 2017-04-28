@@ -11,6 +11,7 @@ export default class Cell {
 
 	assignOwner(player) {
 		this.owner = player
+		player.assignCell(this)
 	}
 
 	/*

@@ -11,6 +11,23 @@ export default class Player {
 		    (50 + Math.floor(Math.random()*206)) +')'
 	}
 
+	assignCell(cellToAssign) {
+		this.playerCells.push(cellToAssign)
+	}
+
+	// unassignCell(cellToUnassign) {
+	// 	for(let cell of this.playerCells) {
+	// 		if(cell.col === cellToUnassign.col && cell.row === cellToUnassign.row) {
+	// 			delete cell
+	// 			return
+	// 		}
+	// 	}
+	// }
+
+	hasCells() {
+		return this.playerCells ? (this.playerCells.length > 0 ? true : false) : false
+	}
+
 	getPlayerColor() {
 		return this.playerColor
 	}

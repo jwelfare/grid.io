@@ -17,35 +17,76 @@ export default class Board {
 	cellClicked(e, player) {
 		let cell = this.getCell(e.col, e.row)
 
-		//todo: refactor out switch statement, have a new method that gets affected cells based on selected cells powerup
-		switch(cell.powerup) {
-			//case Constants.CELL_POWERUP_ENTIRECOL:
-				//return this.entireColCellClick(cell, player)
-			default:
-				return this.cellClick(cell, player)
+		if(!player.hasCells() || this.playerOwnsAdjacent(cell, player)) {
+			switch(cell.powerup) {
+				//case Constants.CELL_POWERUP_ENTIRECOL:
+					//return this.entireColCellClick(cell, player)
+				//case Constants.CELL_POWERUP_SMALLEXPLOSION:
+					//return this.smallExplosionCellClick(cell, player)
+				default:
+					return this.singleCellClick(cell, player)
+			}
+		} else {
+			return []
 		}
+
+		//todo: refactor out switch statement, have a new method that gets affected cells based on selected cells powerup
+		
 	}
 
-	cellClick(cell, player) {
-		let cells = [cell]
+	/* validates that the user has only clicked a cell adjacent to another owned cell */
+	playerOwnsAdjacent(cell, player) {
+		for (let cell of this.getAdjacentCells(cell)) {
+			if (cell.owner && cell.owner.playerId === player.playerId)
+				return true
+		}
+
+		return false
+	}
+
+	getAdjacentCells(cell) {
+		let adjacentCells = []
 
 		if (cell.col != 0) 
-			cells.push(this.getCell(cell.col - 1, cell.row))
+			adjacentCells.push(this.getCell(cell.col - 1, cell.row))
 
 		if (cell.col != Constants.BOARD_SIZE - 1)
-			cells.push(this.getCell(cell.col + 1, cell.row))
+			adjacentCells.push(this.getCell(cell.col + 1, cell.row))
 
 		if (cell.row != 0)
-			cells.push(this.getCell(cell.col, cell.row - 1))
+			adjacentCells.push(this.getCell(cell.col, cell.row - 1))
 
 		if (cell.row != Constants.BOARD_SIZE -1)
-			cells.push(this.getCell(cell.col, cell.row + 1))
+			adjacentCells.push(this.getCell(cell.col, cell.row + 1))
 
-		return cells.map((c) => {
-			c.assignOwner(player)
-			return c.getAsBroadcastable()
-		})
+		return adjacentCells;
 	}
+
+	singleCellClick(cell, player) {
+		cell.assignOwner(player)
+		return [ cell.getAsBroadcastable() ]
+	}
+
+	// smallExplosionCellClick(cell, player) {
+	// 	let cells = [cell]
+
+	// 	if (cell.col != 0) 
+	// 		cells.push(this.getCell(cell.col - 1, cell.row))
+
+	// 	if (cell.col != Constants.BOARD_SIZE - 1)
+	// 		cells.push(this.getCell(cell.col + 1, cell.row))
+
+	// 	if (cell.row != 0)
+	// 		cells.push(this.getCell(cell.col, cell.row - 1))
+
+	// 	if (cell.row != Constants.BOARD_SIZE -1)
+	// 		cells.push(this.getCell(cell.col, cell.row + 1))
+
+	// 	return cells.map((c) => {
+	// 		c.assignOwner(player)
+	// 		return c.getAsBroadcastable()
+	// 	})
+	// }
 
 	getCell(col, row) {
 		return this.cellsArray[col][row]

@@ -7,6 +7,7 @@
 //todo: refactor JS file (separate emitters/listeners from UI)
 import io from 'socket.io-client'
 import * as Constants from '../constants/constants'
+import * as EventConstants from '../constants/event_constants'
 import Board from './app/board'
 
 let gameCanvas = document.getElementById('gameCanvas'),
@@ -21,7 +22,7 @@ gameCanvas.width = Constants.CELL_SIZE * Constants.BOARD_SIZE
 gameCanvas.height = Constants.CELL_SIZE * Constants.BOARD_SIZE
 
 signonSubmit.onclick = function() {
-	socket.emit('player-new', {
+	socket.emit(EventConstants.PLAYER_NEW, {
 		playerName: signonName.value
 	})
 
@@ -29,12 +30,12 @@ signonSubmit.onclick = function() {
 	gameCanvas.style.display = "block"
 }
 
-socket.on('board-load', (data) => {
+socket.on(EventConstants.BOARD_DRAW, (data) => {
 	board = new Board(gameCanvasContext, data)
 	board.render()
 })
 
-socket.on('cell-changes', (cellChanges) => {
+socket.on(EventConstants.CELL_CHANGES, (cellChanges) => {
 	board.updateCells(cellChanges)
 	board.render()
 })
@@ -46,8 +47,16 @@ gameCanvas.onclick = function(e) {
 
     console.log(col + ", " + row)
 
-    socket.emit('cell-clicked', {
+    socket.emit(EventConstants.CELL_CLICKED, {
     	col,
     	row
     })
+}
+
+gameCanvas.onmousedown = function(e) {
+	e.preventDefault()
+}
+
+gameCanvas.onselectstart = function(e) {
+	e.preventDefault()
 }

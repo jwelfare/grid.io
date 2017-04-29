@@ -5,12 +5,13 @@
 */
 
 import * as Constants from '../../constants/constants'
+import * as EventConstants from '../../constants/event_constants'
 import Board from './board'
 import Cell from './cell'
 import Player from './Player'
 
 export default class Game { 
-	constructor() {
+	constructor(io) {
 		this.board = new Board(Constants.BOARD_SIZE)
 		this.players = {}
 	}
@@ -34,4 +35,18 @@ export default class Game {
 	getBoard() {
 		return this.board.getBoard()
 	}
+
+	setLoop(socket) { 
+		setInterval(() => {
+			socket.emit('test-event', {})
+		}, 1000);
+	}
+	// setGameLoop(io) {
+	// 	setInterval(() => {
+	// 		io.on(EventConstants.SERVER_CONNECT, (socket) => {
+	// 			socket.emit('test-event', {})
+	// 		}, EventConstants.GAME_LOOP_FREQ)
+	// 	}, 1000);
+
+	// }
 }

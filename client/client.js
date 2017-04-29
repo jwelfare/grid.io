@@ -40,6 +40,10 @@ socket.on(EventConstants.CELL_CHANGES, (cellChanges) => {
 	board.render()
 })
 
+socket.on('test-event', (data) => {
+	console.log('sick')
+})
+
 gameCanvas.onclick = function(e) {
     let rect = gameCanvas.getBoundingClientRect()
     let col = Math.floor((e.clientX - rect.left) / Constants.CELL_SIZE)

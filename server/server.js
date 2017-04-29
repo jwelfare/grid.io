@@ -7,13 +7,15 @@ import * as EventConstants from '../constants/event_constants'
 import Game from './app/game'
 
 module.exports = function(io) {
-	let game  = new Game(this);
+	let game  = new Game();
 	/*	socket.io functions for broadcasting events to different audiences: 
 			socket.broadcast.emit - all clients EXCEPT socket client
 			socket.emit - socket client
 			io.emit - all connected clients
     */
 	io.on(EventConstants.SERVER_CONNECT, function(socket) {
+		game.setLoop(socket);
+		
 		socket.on(EventConstants.PLAYER_NEW, (data) => {
 			game.newPlayer(data, socket.id)
 
@@ -28,10 +30,7 @@ module.exports = function(io) {
 			if (cellChanges.length)
 				io.emit(EventConstants.CELL_CHANGES, cellChanges)
 		})
-
 		/* main game loop: notifies game class and emits any events returned */
-		setInterval(() => {
 
-		}, EventConstants.GAME_LOOP_FREQ)
 	})
 }

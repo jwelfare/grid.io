@@ -6,8 +6,7 @@
 
 //todo: refactor JS file (separate emitters/listeners from UI)
 import io from 'socket.io-client'
-import * as Constants from '../constants/constants'
-import * as EventConstants from '../constants/event_constants'
+import * as Constants from './constants'
 import Board from './app/board'
 
 let gameCanvas = document.getElementById('gameCanvas'),
@@ -18,11 +17,8 @@ let gameCanvas = document.getElementById('gameCanvas'),
 	socket = io('/'),
 	board
 
-gameCanvas.width = Constants.CELL_SIZE * Constants.BOARD_SIZE
-gameCanvas.height = Constants.CELL_SIZE * Constants.BOARD_SIZE
-
 signonSubmit.onclick = function() {
-	socket.emit(EventConstants.PLAYER_NEW, {
+	socket.emit(Constants.PLAYER_NEW, {
 		playerName: signonName.value
 	})
 
@@ -30,28 +26,32 @@ signonSubmit.onclick = function() {
 	gameCanvas.style.display = "block"
 }
 
-socket.on(EventConstants.BOARD_DRAW, (data) => {
+socket.on(Constants.BOARD_DRAW, (data) => {
 	board = new Board(gameCanvasContext, data)
+	let boardSize = data.length;
+	gameCanvas.width = Constants.CELL_SIZE * boardSize + Constants.CELL_BUFFER * boardSize;
+	gameCanvas.height = Constants.CELL_SIZE * boardSize + Constants.CELL_BUFFER * boardSize;
 	board.render()
 })
 
-socket.on(EventConstants.CELL_CHANGES, (cellChanges) => {
+socket.on(Constants.CELL_CHANGES, (cellChanges) => {
+	console.log(cellChanges)
 	board.updateCells(cellChanges)
 	board.render()
 })
 
-socket.on('test-event', (data) => {
-	console.log('sick')
-})
+// socket.on('test-event', (data) => {
+// 	console.log('sick')
+// })
 
 gameCanvas.onclick = function(e) {
     let rect = gameCanvas.getBoundingClientRect()
-    let col = Math.floor((e.clientX - rect.left) / Constants.CELL_SIZE)
-    let row = Math.floor((e.clientY - rect.top) / Constants.CELL_SIZE)
+    let col = Math.floor((e.clientX - rect.left) / (Constants.CELL_SIZE + Constants.CELL_BUFFER))
+    let row = Math.floor((e.clientY - rect.top) / (Constants.CELL_SIZE + Constants.CELL_BUFFER))
 
     console.log(col + ", " + row)
 
-    socket.emit(EventConstants.CELL_CLICKED, {
+    socket.emit(Constants.CELL_CLICKED, {
     	col,
     	row
     })

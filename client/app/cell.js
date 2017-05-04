@@ -1,4 +1,4 @@
-import * as Constants from '../../constants/constants'
+import * as Constants from '../constants'
 
 export default class Cell {
 	constructor(canvasContext, cellColor, col, row) {
@@ -9,12 +9,11 @@ export default class Cell {
 	}
 
 	render() {
-
 		this.canvasContext.fillStyle = this.cellColor
 
 		this.canvasContext.fillRect(
-			this.col * Constants.CELL_SIZE/* + this.col * Constants.CELL_BUFFER*/, 
-			this.row * Constants.CELL_SIZE/* + this.row * Constants.CELL_BUFFER*/, 
+			this.col * Constants.CELL_SIZE + this.col * Constants.CELL_BUFFER, 
+			this.row * Constants.CELL_SIZE + this.row * Constants.CELL_BUFFER, 
 			Constants.CELL_SIZE, 
 			Constants.CELL_SIZE
 		)

@@ -2,6 +2,8 @@ import Cell from './cell'
 
 export default class Board {
 	constructor(canvasContext, socketCellsArray) {
+		console.log(socketCellsArray);
+		
 		this.canvasContext = canvasContext
 
 		this.cellsArray = socketCellsArray.map((row) => {
@@ -11,8 +13,8 @@ export default class Board {
 		})
 	}
 
-	updateCells(cells) {
-		cells.map((cell) => {
+	updateCells(updatedCells) {
+		updatedCells.map((cell) => {
 			Object.assign(this.cellsArray[cell.col][cell.row], cell) 
 		})
 	}

@@ -3,50 +3,52 @@
 	author: jwelfare
 	desc.: maintains the overall game state including connected clients
 */
+var Board = require('./board'),
+	Player = require('./Player'),
+	Constants = require('../constants');
 
-import * as Constants from '../../constants/constants'
-import * as EventConstants from '../../constants/event_constants'
-import Board from './board'
-import Cell from './cell'
-import Player from './Player'
-
-export default class Game { 
-	constructor(io) {
-		this.board = new Board(Constants.BOARD_SIZE)
-		this.players = {}
-	}
-
-	newPlayer(e, playerId) {
-		this.players[playerId] = new Player(e.playerName, playerId)
-	}
-
-	deletePlayer(playerId) {
-		delete this.players[playerId]
-	}
-
-	cellClicked(e, playerId) {
-		return this.board.cellClicked(e, this.players[playerId])
-	}
-
-	getPlayer(playerId) { 
-		return this.players[playerId]
-	}
-
-	getBoard() {
-		return this.board.getBoard()
-	}
-
-	setLoop(socket) { 
-		setInterval(() => {
-			socket.emit('test-event', {})
-		}, 1000);
-	}
-	// setGameLoop(io) {
-	// 	setInterval(() => {
-	// 		io.on(EventConstants.SERVER_CONNECT, (socket) => {
-	// 			socket.emit('test-event', {})
-	// 		}, EventConstants.GAME_LOOP_FREQ)
-	// 	}, 1000);
-
-	// }
+function Game(observers) {
+	this.observers = observers;
+	this.board = new Board(Constants.BOARD_SIZE);
+	this.players = {};
 }
+
+Game.prototype.newPlayer = function(e, playerId) {
+	this.players[playerId] = new Player(e.playerName, playerId);
+}
+
+Game.prototype.deletePlayer = function(playerId) {
+	delete this.players[playerId];
+}
+
+Game.prototype.cellClicked = function(e, playerId) {
+	return this.board.cellClicked(e, this.players[playerId]);
+}
+
+Game.prototype.getPlayer = function(playerId) { 
+	return this.players[playerId];
+}
+
+Game.prototype.getBoard = function() {
+	return this.board.getBoard();
+}
+
+Game.prototype.startLoop = function(io) {
+	var loopCount = 0;
+
+	io.on(Constants.SERVER_CONNECT, function(socket) {
+		setInterval(function() {
+			loopCount++;
+
+			if (loopCount % Constants.POWERUP_CHANGE_FREQ == 0)
+				io.emit(Constants.POWERUP_CHANGES, this.updatePowerups());
+
+		}, Constants.GAME_LOOP_FREQ);
+	});
+}
+
+Game.prototype.updatePowerups = function() {
+	return this.board.updatePowerups();
+}
+
+module.exports = Game;

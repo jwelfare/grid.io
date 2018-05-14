@@ -3,7 +3,6 @@ var Cell = require('./cell');
 function Board(boardSize) {
 	this.boardSize = boardSize;
 	this.cellsArray = [];
-	this.powerupFactory = new
 
 	for (var nCol = 0; nCol < this.boardSize; nCol++) {
 		this.cellsArray[nCol] = [];
@@ -34,7 +33,6 @@ Board.prototype.cellClicked = function(e, player) {
 	}
 
 	//todo: refactor out switch statement, have a new method that gets affected cells based on selected cells powerup
-	
 }
 
 /* validates that the user has only clicked a cell adjacent to another owned cell */

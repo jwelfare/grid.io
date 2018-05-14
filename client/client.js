@@ -35,14 +35,9 @@ socket.on(Constants.BOARD_DRAW, (data) => {
 })
 
 socket.on(Constants.CELL_CHANGES, (cellChanges) => {
-	console.log(cellChanges)
 	board.updateCells(cellChanges)
 	board.render()
 })
-
-// socket.on('test-event', (data) => {
-// 	console.log('sick')
-// })
 
 gameCanvas.onclick = function(e) {
     let rect = gameCanvas.getBoundingClientRect()

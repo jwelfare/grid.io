@@ -1,4 +1,4 @@
-public function Powerup() {
+function Powerup() {
 	this.name
 }
 

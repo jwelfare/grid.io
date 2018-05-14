@@ -3,6 +3,7 @@ var Cell = require('./cell');
 function Board(boardSize) {
 	this.boardSize = boardSize;
 	this.cellsArray = [];
+	this.powerupFactory = new
 
 	for (var nCol = 0; nCol < this.boardSize; nCol++) {
 		this.cellsArray[nCol] = [];

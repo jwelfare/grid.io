@@ -40,6 +40,7 @@ Game.prototype.startLoop = function(io) {
 		setInterval(function() {
 			loopCount++;
 
+			/* update powerups every 20 [powerup change freq.] ticks*/
 			if (loopCount % Constants.POWERUP_CHANGE_FREQ == 0)
 				io.emit(Constants.POWERUP_CHANGES, this.updatePowerups());
 

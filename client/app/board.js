@@ -3,7 +3,7 @@ import Cell from './cell'
 export default class Board {
 	constructor(canvasContext, socketCellsArray) {
 		console.log(socketCellsArray);
-		
+
 		this.canvasContext = canvasContext
 
 		this.cellsArray = socketCellsArray.map((row) => {
@@ -21,7 +21,9 @@ export default class Board {
 
 	render() {
 		this.cellsArray.map((row) => {
-			row.map((cell) => { cell.render() })
+			row.map((cell) => { 
+				cell.render() 
+			})
 		})
 	}
 }

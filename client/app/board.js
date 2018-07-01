@@ -1,12 +1,13 @@
 import Cell from './cell'
+import * as Constants from '../constants'
 
 export default class Board {
-	constructor(canvasContext, socketCellsArray) {
-		this.canvasContext = canvasContext
+	constructor(gameCanvasContext, socketCellsArray) {
+		this.gameCanvasContext = gameCanvasContext
 
 		this.cellsArray = socketCellsArray.map((row) => {
 			return row.map((cell) => {
-				return new Cell(this.canvasContext, cell.cellColor, cell.col, cell.row)
+				return new Cell(this.gameCanvasContext, cell.cellColor, cell.col, cell.row)
 			})
 		})
 	}

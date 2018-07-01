@@ -7,6 +7,8 @@ var Constants = require('./constants'),
 	Game = require('./app/game');
 
 module.exports = function(io) {
+	//todo: implement game tick timer to introduce random power ups
+
 	var game  = new Game();
 	/*	socket.io functions for broadcasting events to different audiences: 
 			socket.broadcast.emit - all clients EXCEPT socket client
@@ -30,8 +32,5 @@ module.exports = function(io) {
 			if (cellChanges)
 				io.emit(Constants.CELL_CHANGES, cellChanges)
 		});
-
-		// game.setLoop(socket);
-		/* main game loop: notifies game class and emits any events returned */
 	})
 }
